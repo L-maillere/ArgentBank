@@ -1,0 +1,46 @@
+.modal{
+    &-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    &-content {
+        background: white;
+        padding: 20px;
+        width: 300px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+}
+.close-modal {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.btn-login {
+    display: block;
+    width: 100%;
+    text-align: center;
+    border-color: #00bc77;
+    border-width: 2px;
+    border-style: outset;
+    background-color: #00bc77;
+    color: white;
+    padding: 8px 0;
+    text-decoration: none;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+}

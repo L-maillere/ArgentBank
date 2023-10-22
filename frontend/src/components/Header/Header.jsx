@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import HeaderLogo from '../../assets/argentBankLogo.png';
+import HeaderLogo from '../../assets/argentBankLogo.webp';
 import { logout } from '../../features/authentification/authentification';
 
 function Header () {

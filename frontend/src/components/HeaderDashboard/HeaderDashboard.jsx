@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { changeUsername } from "../../features/authentification/changeusername";
 
 function HeaderDashboard() {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [isEditing, setIsEditing] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const isLoggedIn = useSelector(state => state.authentification.isLoggedIn);
     const userName = useSelector(state => state.authentification.userInfo?.userName);
     const firstName = useSelector(state => state.authentification.userInfo?.firstName);
     const lastName = useSelector(state => state.authentification.userInfo?.lastName);
@@ -24,16 +20,10 @@ function HeaderDashboard() {
     };
 
     useEffect(() => {
-        if (!isLoggedIn && !isLoading) {
-            navigate('/sign-in');
-        } 
-    }, [isLoggedIn, isLoading, navigate]);
-
-    useEffect(() => {
-        if (currentToken) {
-            setIsLoading(false);
+        if (changeUsernameStatus === 'pending') {
+            dispatch({ type: 'resetChangeUsernameStatus' });
         }
-    }, [currentToken]);
+    }, [changeUsernameStatus, dispatch]);
 
     useEffect(() => {
         if (changeUsernameStatus === 'success') {

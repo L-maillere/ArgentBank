@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import store from './utils/store';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchUserProfile, loginFromLocalStorage } from './features/authentification/authentification';
+import { loginFromLocalStorage } from './features/authentification/authentification';
 import Home from './pages/Home/Home';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -20,8 +20,9 @@ function MainLayout() {
     useEffect(() => {
         const token = localStorage.getItem('authToken');
         if (token) {
-            dispatch(loginFromLocalStorage(token));
-            dispatch(fetchUserProfile());
+            dispatch(loginFromLocalStorage());
+        } else {
+            dispatch({ type: 'authentification/setLoadingFalse'});
         }
     }, [dispatch]);
 

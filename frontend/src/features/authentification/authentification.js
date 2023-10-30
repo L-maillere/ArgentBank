@@ -3,6 +3,7 @@ import { changeUsername } from "./changeusername";
 
 const initialState = {
     isLoggedIn: false,
+    isLoading: true,
     token: null,
     userInfo: null,
     error: null,
@@ -36,7 +37,6 @@ export const fetchUserProfile = createAsyncThunk(
     'authentification/fetchUserProfile',
     async (_, { dispatch, getState, rejectWithValue }) => {
         const token = getState().authentification.token;
-
         try {
             const response = await fetch('http://localhost:3001/api/v1/user/profile', {
                 method: 'POST',
@@ -67,6 +67,8 @@ export const loginFromLocalStorage = () => (dispatch) => {
     if (token) {
         dispatch({ type: 'authentification/setTokenFromLocalStorage', payload: token });
         dispatch(fetchUserProfile());
+    } else {
+        dispatch({ type: 'authentification/setLoadingFalse' });
     }
 };
 
@@ -84,6 +86,12 @@ const authentificationSlice = createSlice({
             state.isLoggedIn = true;
             state.token = action.payload;
         },
+        resetChangeUsernameStatus: (state) => {
+            state.changeUsernameStatus = null;
+        },
+        setLoadingFalse: (state) => {
+            state.isLoading = false;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -95,11 +103,16 @@ const authentificationSlice = createSlice({
             .addCase(login.rejected, (state, action) => {
                 state.error = action.payload;
             })
+            .addCase(fetchUserProfile.pending, (state) => {
+                state.isLoading = true;
+            })
             .addCase(fetchUserProfile.fulfilled, (state, action) => {
                 state.userInfo = action.payload;
+                state.isLoading = false;
                 state.error = null;
             })
             .addCase(fetchUserProfile.rejected, (state, action) => {
+                state.isLoading = false;
                 state.error = action.payload;
             })
             .addCase(changeUsername.fulfilled, (state, action) => {
@@ -107,6 +120,9 @@ const authentificationSlice = createSlice({
                 state.changeUsernameStatus = 'success';
                 state.error = null;
             })
+            .addCase(changeUsername.pending, (state) => {
+                state.changeUsernameStatus = 'pending';
+            })            
             .addCase(changeUsername.rejected, (state, action) => {
                 state.changeUsernameStatus = 'failed';
                 state.error = action.payload;
